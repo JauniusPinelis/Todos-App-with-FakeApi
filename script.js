@@ -1,17 +1,29 @@
 todos = [
-    {   id: 1,
-        name: 1,
-        description: 'description'
-    },
-    {   id: 2,
-        name: 2,
-        description: 'description'
-    },
-    {   id: 3,
-        name: 3,
-        description: 'description'
-    }
+    // {   id: 1,
+    //     name: 1,
+    //     description: 'description'
+    // },
+    // {   id: 2,
+    //     name: 2,
+    //     description: 'description'
+    // },
+    // {   id: 3,
+    //     name: 3,
+    //     description: 'description'
+    // }
 ];
+
+let serverUrl = "http://localhost:3000/todos";
+
+getTodosData();
+
+function getTodosData() {
+    axios.get(serverUrl)
+    .then(function (response) {
+        todos = response.data;
+        updateHtmlTable();
+    })
+}
 
 let globalVariable = 5;
 // pass by reference or pass by value;
@@ -57,12 +69,21 @@ function addNewTodo() {
     let description = document.getElementById("todo-description").value;
     //3 create todo object with received name and description
     var todo = {
-        id: id,
+        //id: id,
         name: nameValue,
         description: description
     }
     //4 add new todo to todoslist
     todos.push(todo);
+
+    //4.5 submit new todo to db
+    axios.post(serverUrl, todo)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     
     //5 Call UpdateHtmlTable function
     clearForm();
